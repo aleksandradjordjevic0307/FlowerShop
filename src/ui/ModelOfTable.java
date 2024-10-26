@@ -7,20 +7,24 @@ package ui;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import model.Flower;
-import model.FlowerType;
+
 
 /**
  *
  * @author Aleksandra
  */
-public class TableModel extends AbstractTableModel{
+public class ModelOfTable extends AbstractTableModel{
     
     //redovi
     List<Flower> flowers = controller.Controller.getInstance().getFlowers();
 
     //kolone
-    private String[] columns = {"Name", "Type", "Color", "Year of arrival"};
+    private String[] columns = {"Name", "Type", "Color", "Year of arrival", "Supplier"};
 
+    public ModelOfTable(List<Flower> flowerList) {
+        this.flowers=flowerList;
+    }
+    
     @Override
     public int getRowCount() {
         return flowers.size();
@@ -43,6 +47,8 @@ public class TableModel extends AbstractTableModel{
                 return f.getColor();
             case 3: 
                 return f.getYearOfArrival();
+            case 4:
+                return f.getSupplier();
             default:
                 return null;
                 

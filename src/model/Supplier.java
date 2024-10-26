@@ -12,6 +12,7 @@ import java.util.Objects;
  */
 public class Supplier {
     
+    private int id;
     private String name;
     private String contactNumber;
     private int yearOfPartnership;
@@ -23,6 +24,15 @@ public class Supplier {
         this.yearOfPartnership = yearOfPartnership;
         this.description = description;
     }
+
+    public Supplier(int id, String name, String contactNumber, int yearOfPartnership, String description) {
+        this.id = id;
+        this.name = name;
+        this.contactNumber = contactNumber;
+        this.yearOfPartnership = yearOfPartnership;
+        this.description = description;
+    }
+    
     
 
     public String getName() {
@@ -59,7 +69,7 @@ public class Supplier {
 
     @Override
     public String toString() {
-        return "Supplier{" + "name=" + name + ", contactNumber=" + contactNumber + ", yearOfPartnership=" + yearOfPartnership + ", description=" + description + '}';
+        return   name + ", " + contactNumber;
     }
 
     @Override
@@ -90,6 +100,14 @@ public class Supplier {
             return false;
         }
         return Objects.equals(this.description, other.description);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     

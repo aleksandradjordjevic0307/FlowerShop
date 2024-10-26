@@ -12,18 +12,39 @@ import java.util.Objects;
  */
 public class Flower {
     
+    private int id;
     private String name;
     private FlowerType type;
     private String color;
     private int yearOfArrival;
+    private Supplier supplier;
 
-    public Flower(String name, FlowerType type, String color, int yearOfArrival) {
+    public Flower(String name, FlowerType type, String color, int yearOfArrival, Supplier supplier) {
         this.name = name;
         this.type = type;
         this.color = color;
         this.yearOfArrival = yearOfArrival;
+        this.supplier = supplier;
+    }
+
+    public Flower(int id, String name, FlowerType type, String color, int yearOfArrival, Supplier supplier) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.color = color;
+        this.yearOfArrival = yearOfArrival;
+        this.supplier = supplier;
     }
     
+    
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
 
     public String getName() {
         return name;
@@ -90,6 +111,14 @@ public class Flower {
     @Override
     public String toString() {
         return "Flower{" + "name=" + name + ", type=" + type + ", color=" + color + ", yearOfArrival=" + yearOfArrival + '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     

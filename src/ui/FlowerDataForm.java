@@ -8,6 +8,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Flower;
 import model.FlowerType;
+import model.Supplier;
 
 /**
  *
@@ -23,6 +24,7 @@ public class FlowerDataForm extends javax.swing.JDialog {
     public FlowerDataForm(java.awt.Frame parent, boolean modal, Flower f) {
         super(parent, modal);
         initComponents();
+        mf.fillComboBoxSuppliers(jComboBoxSuppliers);
         this.mf=(MainForm) parent;
         if(f!=null){
             this.flowerForChange=f;
@@ -57,6 +59,8 @@ public class FlowerDataForm extends javax.swing.JDialog {
         jButtonAdd = new javax.swing.JButton();
         jButtonChange = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBoxSuppliers = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -91,6 +95,8 @@ public class FlowerDataForm extends javax.swing.JDialog {
             }
         });
 
+        jLabel5.setText("Supplier");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,13 +109,15 @@ public class FlowerDataForm extends javax.swing.JDialog {
                             .addComponent(jLabel4)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldName)
                             .addComponent(jComboBoxType, 0, 223, Short.MAX_VALUE)
                             .addComponent(jTextFieldColor)
-                            .addComponent(jTextFieldYearOfArrival)))
+                            .addComponent(jTextFieldYearOfArrival)
+                            .addComponent(jComboBoxSuppliers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(jButtonAdd)
@@ -117,7 +125,7 @@ public class FlowerDataForm extends javax.swing.JDialog {
                         .addComponent(jButtonChange)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCancel)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +146,11 @@ public class FlowerDataForm extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextFieldYearOfArrival, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBoxSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdd)
                     .addComponent(jButtonChange)
@@ -160,12 +172,14 @@ public class FlowerDataForm extends javax.swing.JDialog {
         FlowerType type = (FlowerType) jComboBoxType.getSelectedItem();
         String color = jTextFieldColor.getText();
         int yearOfArrival = Integer.parseInt(jTextFieldYearOfArrival.getText());
+        Supplier supplier = (Supplier) jComboBoxSuppliers.getSelectedItem();
         
-        Flower f = new Flower(name, type, color, yearOfArrival);
+        Flower f = new Flower(name, type, color, yearOfArrival, supplier);
         
-        controller.Controller.getInstance().addFlower(f);
+        controller.Controller.getInstance().addFlowerToDatabase(f);
         JOptionPane.showMessageDialog(this, "Successfully added one flower!");
         this.dispose();
+        mf.refreshTable();
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangeActionPerformed
@@ -174,16 +188,20 @@ public class FlowerDataForm extends javax.swing.JDialog {
         FlowerType type = (FlowerType) jComboBoxType.getSelectedItem();
         String color = jTextFieldColor.getText();
         int yearOfArrival = Integer.parseInt(jTextFieldYearOfArrival.getText());
+        Supplier supplier = (Supplier) jComboBoxSuppliers.getSelectedItem();
         
         flowerForChange.setColor(color);
         flowerForChange.setName(name);
         flowerForChange.setType(type);
         flowerForChange.setYearOfArrival(yearOfArrival);
+        flowerForChange.setSupplier(supplier);
         
-        mf.refreshTable();
+        controller.Controller.getInstance().updateFlowerInDatabase(flowerForChange);
+       
         JOptionPane.showMessageDialog(this, "Successfully changed!");
         
         this.dispose();
+        mf.refreshTable();
     }//GEN-LAST:event_jButtonChangeActionPerformed
 
     
@@ -192,11 +210,13 @@ public class FlowerDataForm extends javax.swing.JDialog {
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonChange;
+    private javax.swing.JComboBox<Supplier> jComboBoxSuppliers;
     private javax.swing.JComboBox<String> jComboBoxType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextFieldColor;
     private javax.swing.JTextField jTextFieldName;
     private javax.swing.JTextField jTextFieldYearOfArrival;

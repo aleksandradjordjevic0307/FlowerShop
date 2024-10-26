@@ -4,10 +4,15 @@
  */
 package ui;
 
+import controller.Controller;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import model.Flower;
 import model.FlowerType;
+import model.Supplier;
 
 /**
  *
@@ -18,11 +23,12 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form MainForm
      */
-    private TableModel tm = new TableModel();
+
     public MainForm() {
         initComponents();
-        
-        jTableFlowers.setModel(tm);
+        fillComboBoxSuppliers(jComboBoxSupplier);
+        ModelOfTable mt = new ModelOfTable(Controller.getInstance().getFlowerListFromDatabase());
+        jTableFlowers.setModel(mt);
     }
 
     /**
@@ -46,6 +52,8 @@ public class MainForm extends javax.swing.JFrame {
         jButtonDelete = new javax.swing.JButton();
         jCheckBoxBouquet = new javax.swing.JCheckBox();
         jCheckBoxSingleFlower = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxSupplier = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,14 +103,16 @@ public class MainForm extends javax.swing.JFrame {
 
         jCheckBoxSingleFlower.setText("Single flower");
 
+        jLabel3.setText("Supplier");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,15 +120,23 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(jButtonChange)
                             .addComponent(jButtonDelete)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBoxType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jComboBoxType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jComboBoxSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(61, 61, 61)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonFilter)
@@ -142,13 +160,17 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jComboBoxSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCheckBoxBouquet)
                             .addComponent(jCheckBoxSingleFlower))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -167,7 +189,7 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         FlowerDataForm fd = new FlowerDataForm(this, true, null);
         fd.setVisible(true);
-        refreshTable();
+      
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -176,11 +198,12 @@ public class MainForm extends javax.swing.JFrame {
         if(index==-1){
             JOptionPane.showMessageDialog(this, "You have to select a row!");
         }
-        Flower flower = controller.Controller.getInstance().getFlowers().get(index);
-        controller.Controller.getInstance().deleteFlower(flower);
-        JOptionPane.showMessageDialog(this, "Successfully deleted one row!");
-        refreshTable();
         
+        Flower flower = controller.Controller.getInstance().getFlowerListFromDatabase().get(index);
+        controller.Controller.getInstance().deleteFlowerFromDatabase(flower);
+        JOptionPane.showMessageDialog(this, "Successfully deleted one row!");
+        
+        refreshTable();
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangeActionPerformed
@@ -189,10 +212,10 @@ public class MainForm extends javax.swing.JFrame {
         if(index==-1){
             JOptionPane.showMessageDialog(this, "You have to select a row!");
         }
-        Flower flowerForChanging = controller.Controller.getInstance().getFlowers().get(index);
+        Flower flowerForChanging = controller.Controller.getInstance().getFlowerListFromDatabase().get(index);
         FlowerDataForm fd = new FlowerDataForm(this, true, flowerForChanging);
         fd.setVisible(true);
-        refreshTable();
+        
               
     }//GEN-LAST:event_jButtonChangeActionPerformed
 
@@ -238,15 +261,27 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jButtonFilter;
     private javax.swing.JCheckBox jCheckBoxBouquet;
     private javax.swing.JCheckBox jCheckBoxSingleFlower;
+    private javax.swing.JComboBox<Supplier> jComboBoxSupplier;
     private javax.swing.JComboBox<String> jComboBoxType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableFlowers;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 
-    void refreshTable() {
-        tm.refreshData();
+
+     void fillComboBoxSuppliers(JComboBox jc) {
+        List<Supplier> s = new ArrayList<>();
+        s = controller.Controller.getInstance().getSuppliersFromDatabase();
+        for(Supplier su : s){
+            jc.addItem(su);
+        }
+    }
+
+     void refreshTable() {
+        ModelOfTable mt = new ModelOfTable(Controller.getInstance().getFlowerListFromDatabase());
+        jTableFlowers.setModel(mt);
     }
 }
